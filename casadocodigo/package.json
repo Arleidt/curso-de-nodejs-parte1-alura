@@ -1,0 +1,23 @@
+{
+  "name": "casadocodigo",
+  "version": "1.0.0",
+  "description": "livraria casa do codigo",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Arleidt/nodejs-alura.git"
+  },
+  "author": "arlei duarte",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Arleidt/nodejs-alura/issues"
+  },
+  "homepage": "https://github.com/Arleidt/nodejs-alura#readme",
+  "dependencies": {
+    "express": "4.16.3"
+  }
+}
