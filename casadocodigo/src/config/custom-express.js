@@ -1,5 +1,9 @@
 //encapsulamento do modulo express no arquivo custom-express,js
 
+//habilitar biblioteca marko na nossa aplicação primeiro habilita no node e segundo no express
+require('marko/node-require').install();
+require('marko/express');
+
 //importa e retorna função express
 const express = require('express');
 //chamando função express obtendo um objeto do tipo express,  para configurar a nossa aplicação, e execute express();
