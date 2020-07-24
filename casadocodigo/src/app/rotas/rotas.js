@@ -1,5 +1,6 @@
 //encapsulamento rotas
 
+const db = require('../../config/database')
 //  exportar uma função (que, no mundo JavaScript, é a instrução capaz de receber um parâmetro) capaz de receber o objeto app. 
 //ECMAScript 6, que introduziu as famosas arrow functions:
 module.exports = (app) => {
@@ -23,7 +24,25 @@ module.exports = (app) => {
 
   
   app.get('/livros', function(req, resp){
-    resp.marko(
+    //all metodo de listagem no bd, 2 parâmetros string representando o sql propriamente dito e e o segundo parâmetro uma função que vai ser executada quando nossa consulta tiver terminado
+    db.all (' SELECT * FROM livros', function(erro, resultados){
+
+      resp.marko(
+        require('../views/livros/lista/lista.marko'),
+        {
+          //passando resultados que vieram do db
+            livros : resultados
+        }
+  
+      );
+
+    } );
+    
+  });
+
+} ;
+
+   /** resp.marko(
       require('../views/livros/lista/lista.marko'),
       {
         // recebendo segundo parametro, objeto javascript contendo as informações que vai enviar para a tela que vai ser carregada definido chaves e valores do objeto javascript
@@ -41,13 +60,14 @@ module.exports = (app) => {
 
       }
 
-    );
+    ); 
+    
 
   });
 
 } ;
 
-
+        */
     /**
     Agora, queremos acessar o conteúdo armazenado em lista.marko. Para isso, executaremos o
      método resp.marko(), que foi habilitado com a inclusão do Marko no nosso projeto. 
