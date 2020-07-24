@@ -1,5 +1,8 @@
 //encapsulamento rotas
 
+//import Livro.dao, Nota: repare que estamos usando LivroDao, com letra maiúscula, pois é uma referência exata à classe que criamos.
+const LivroDao =require('../infra/livro.dao.js');
+
 const db = require('../../config/database')
 //  exportar uma função (que, no mundo JavaScript, é a instrução capaz de receber um parâmetro) capaz de receber o objeto app. 
 //ECMAScript 6, que introduziu as famosas arrow functions:
@@ -24,8 +27,36 @@ module.exports = (app) => {
 
   
   app.get('/livros', function(req, resp){
-    //all metodo de listagem no bd, 2 parâmetros string representando o sql propriamente dito e e o segundo parâmetro uma função que vai ser executada quando nossa consulta tiver terminado
-    db.all (' SELECT * FROM livros', function(erro, resultados){
+
+    //instancia da classe
+    const livroDao = new LivroDao(db);
+
+    livroDao.lista(function(erro, resultados) {
+      if (erro)        {
+        console.log("Houve um erro");
+        console.log(erro);
+    } else {        
+        console.log("Sucesso");
+        console.log(resultados);
+    }
+
+      resp.marko(
+          require('../views/livros/lista/lista.marko'),
+          {
+              livros: resultados
+          }
+
+      );
+
+    } );
+    
+  });
+
+} ;
+
+
+//all metodo de listagem no bd, 2 parâmetros string representando o sql propriamente dito e e o segundo parâmetro uma função que vai ser executada quando nossa consulta tiver terminado
+    /* db.all (' SELECT * FROM livros', function(erro, resultados){
 
       resp.marko(
         require('../views/livros/lista/lista.marko'),
@@ -36,11 +67,7 @@ module.exports = (app) => {
   
       );
 
-    } );
-    
-  });
-
-} ;
+    } ); */
 
    /** resp.marko(
       require('../views/livros/lista/lista.marko'),
