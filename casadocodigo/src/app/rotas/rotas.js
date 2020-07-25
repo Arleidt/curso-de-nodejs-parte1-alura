@@ -25,21 +25,27 @@ module.exports = (app) => {
 
   });
 
-  
   app.get('/livros', function(req, resp){
-
     //instancia da classe
     const livroDao = new LivroDao(db);
 
-    livroDao.lista(function(erro, resultados) {
-      if (erro)        {
-        console.log("Houve um erro");
-        console.log(erro);
-    } else {        
-        console.log("Sucesso");
-        console.log(resultados);
-    }
+      livroDao.lista()
+          .then(livros => resp.marko(
+            require('../views/livros/lista/lista.marko'),
+                {
+                    livros: livros
+                }
 
+          ))
+            .catch(erro => console.log(erro));
+
+  });
+};
+
+
+
+  /* 
+    livroDao.lista(function(erro, resultados) {
       resp.marko(
           require('../views/livros/lista/lista.marko'),
           {
@@ -54,9 +60,12 @@ module.exports = (app) => {
 
 } ;
 
-
+ Linha 34- Quando fazemos a listagem, chamamos o método lista() do nosso livroDao, passando uma
+  função de callback que é executada ao final da operação assíncrona do acesso ao banco de dados. 
+  Por padrão, no mundo JavaScript, utilizam-se Promises para esse tipo de situação, e é isso que faremos agora.
+ 
 //all metodo de listagem no bd, 2 parâmetros string representando o sql propriamente dito e e o segundo parâmetro uma função que vai ser executada quando nossa consulta tiver terminado
-    /* db.all (' SELECT * FROM livros', function(erro, resultados){
+     db.all (' SELECT * FROM livros', function(erro, resultados){
 
       resp.marko(
         require('../views/livros/lista/lista.marko'),
@@ -67,9 +76,9 @@ module.exports = (app) => {
   
       );
 
-    } ); */
+    } ); 
 
-   /** resp.marko(
+    resp.marko(
       require('../views/livros/lista/lista.marko'),
       {
         // recebendo segundo parametro, objeto javascript contendo as informações que vai enviar para a tela que vai ser carregada definido chaves e valores do objeto javascript
@@ -94,8 +103,8 @@ module.exports = (app) => {
 
 } ;
 
-        */
-    /**
+        
+    
     Agora, queremos acessar o conteúdo armazenado em lista.marko. Para isso, executaremos o
      método resp.marko(), que foi habilitado com a inclusão do Marko no nosso projeto. 
      Com ele, poderemos exibir arquivos .marko para o cliente na resposta, sendo necessário 
@@ -111,5 +120,4 @@ module.exports = (app) => {
                   </body> 
             </html>
           `
-    ); 
-    */
+    ); **/
