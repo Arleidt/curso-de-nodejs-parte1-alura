@@ -1,2 +1,2 @@
 # nodejs-alura
-Node.js. javaScript no backend
+Node.js Parte 1: Inovando com JavaScript no backend
