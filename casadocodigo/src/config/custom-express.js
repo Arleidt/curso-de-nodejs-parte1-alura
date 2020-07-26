@@ -8,6 +8,12 @@ require('marko/express');
 const express = require('express');
 //chamando função express obtendo um objeto do tipo express,  para configurar a nossa aplicação, e execute express();
 const app = express();
+//chamando modulo body-parser,  uma nova constante bodyParser que vai receber o retorno do require('body-parser').
+const bodyParser = require('body-parser');
+//usaremos o app (que é o objeto do express) para invocar o método use() recebendo exatamente o middleware que queremos definir na nossa aplicação.
+app.use(bodyParser.urlencoded({ 
+  extended: true
+}));
 //importando rotas e suas funções e passando para constante rotas
 const rotas = require('../app/rotas/rotas');
 //constante rotas recebendo objeto app
@@ -16,3 +22,9 @@ rotas(app);
 module.exports = app;
 
 
+/**Passaremos bodyParser, para o qual delegaremos a criação desse middleware, e o método 
+urlencoded(), que define como o body-parser deve funcionar, e que está ligado à forma padrão de 
+envio dos formulários HTML. Esse método receberá um objeto JavaScript com a configuração 
+extended : true. Dessa forma, ele estará habilitado a receber objetos complexos em 
+formato .json vindos do nosso formulário no navegador. Fazendo essa configuração, o bodyParser 
+nos devolverá o middleware que precisamos. */

@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Arleidt/nodejs-alura#readme",
   "dependencies": {
+    "body-parser": "1.18.3",
     "express": "4.16.3",
     "marko": "4.22.1",
     "sqlite3": "^5.0.0"

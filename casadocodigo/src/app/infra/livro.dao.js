@@ -6,6 +6,33 @@ class LivroDao {
       this._db = db;
   }
 
+    adiciona(livro){
+        return new Promise((resolve, reject) => {
+              this._db.run(`
+                    INSERT INTO LIVROS (
+                            titulo,
+                            preco,
+                            descricao
+                        ) values (?, ?, ?)
+                    `,
+                    [
+                        livro.titulo,
+                        livro.preco,
+                        livro.descricao
+                    ],
+                    function (err) {
+                        if (err) {
+                            console.log(err);
+                            return reject('Não foi possível adicionar o livro!');
+                        }
+
+                        resolve();
+                    } 
+              )
+
+        });
+    }
+
     lista( ) {
         return new Promise((resolve, reject) => { 
             this._db.all(
@@ -69,4 +96,24 @@ module.exports = LivroDao;
       
           )
       
-      } */
+      } 
+      
+Com this, pegaremos a instância do nosso banco (_db) e executaremos o run(), um método so SQLite 
+utilizado para executar, no banco de dados, instruções que não retornem nenhum resultado, 
+como as instruções de inserção, deleção e atualização. Esse método receberá três parâmetros. 
+O primeiro deles é a string representando a instrução que queremos executar no banco de dados 
+- nesse caso, a instrução de inserção:
+Aqui, estamos inserindo nos campos titulo, preco e descricao, com os valores ?, ?, ?. 
+Cada uma dessas interrogações representa uma informação do nosso livro - 
+ou seja, título, preço e descrição, respectivamente. Se tivéssemos mais informações, 
+bastaria adicionarmos mais interrogações. Como segundo parâmetro, passaremos um array com 
+as informações que substituirão essas interrogações: Repare que, no array, é necessário manter 
+exatamente a mesma ordem que foi colocada na instrução de inserção, de modo que as informações 
+sejam inseridas nas colunas correspondentes. O último parâmetro que passaremos é uma função
+ callback que será executada ao final dessa inserção. Essa função receberá, como parâmetro, somente 
+ um erro (err) - lembrando que o método run() não retorna nenhum resultado, 
+ somente um erro (caso ocorra um). Em caso de erro, ele será impresso no console, 
+ além de executarmos a função reject() dizendo "Não foi possível adicionar o livro!". 
+ Caso contrário, simplesmente resolveremos a Promise.
+      
+      */
