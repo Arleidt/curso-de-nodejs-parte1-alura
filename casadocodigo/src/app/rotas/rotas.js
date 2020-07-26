@@ -53,6 +53,16 @@ module.exports = (app) => {
           .catch(erro => console.log(erro));  
   });
 
+  //:id criando variavel na url,qualquer coisa passada depois da ultima / vai ser salva dentro da var id
+  app.delete('/livros/:id', function(req, resp) {
+        //recuperando valor variável
+        const id = req.params.id;
+        const livroDao = new LivroDao(db);
+        livroDao.remove(id)
+                //tudo deu certo devolve status 200
+                .then(() => resp.status(200).end())
+                .catch(erro => console.log(erro));
+  });
 };
 
 
@@ -133,4 +143,12 @@ module.exports = (app) => {
                   </body> 
             </html>
           `
-    ); **/
+    );
+    app delete
+    Precisamos que o express saiba que a informação que estamos passando na URL é a id do
+     livro que queremos excluir, e que essa informação é variável para cada requisição. 
+     Felizmente, o express nos possibilita criar variáveis na própria URL da rota. Para isso, 
+     basta usarmos dois pontos (:) seguidos do nome da variável, que nesse caso é id.
+     Para recuperarmos esse valor, basta, dentro do callback, buscarmos o id entre os parâmetros
+      dentro da requisição (req.params.id). Essa informação será salva em uma constante id.
+    **/

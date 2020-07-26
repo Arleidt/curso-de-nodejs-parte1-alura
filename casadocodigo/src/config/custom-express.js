@@ -10,6 +10,8 @@ const express = require('express');
 const app = express();
 //chamando modulo body-parser,  uma nova constante bodyParser que vai receber o retorno do require('body-parser').
 const bodyParser = require('body-parser');
+//metodo use criar middleware, sempre que encontrar /estático ative o middleware, req para recurso estático. Met estático indicar express onde está pasta de arq estáticos. req para estatico o express vai ativar o middleware retornado pelo metodo static
+app.use('/estatico', express.static('src/app/public'));
 //usaremos o app (que é o objeto do express) para invocar o método use() recebendo exatamente o middleware que queremos definir na nossa aplicação.
 app.use(bodyParser.urlencoded({ 
   extended: true
