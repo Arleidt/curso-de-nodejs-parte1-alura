@@ -40,7 +40,7 @@ module.exports = (app) => {
   });
 
   app.get('/livros/form', function(req, resp){
-    resp.marko(require('../views/livros/form/form.marko'));
+    resp.marko(require('../views/livros/form/form.marko'), { livro: {} });
 
     
   });
@@ -49,6 +49,14 @@ module.exports = (app) => {
     console.log(req.body);
     const livroDao = new LivroDao(db);
       livroDao.adiciona(req.body)
+          .then(resp.redirect('/livros'))
+          .catch(erro => console.log(erro));  
+  });
+
+  app.put('/livros', function(req, resp) {
+    console.log(req.body);
+    const livroDao = new LivroDao(db);
+      livroDao.atualiza(req.body)
           .then(resp.redirect('/livros'))
           .catch(erro => console.log(erro));  
   });
@@ -63,6 +71,22 @@ module.exports = (app) => {
                 .then(() => resp.status(200).end())
                 .catch(erro => console.log(erro));
   });
+
+  app.get('/livros/form/:id', function(req, resp) {
+    const id = req.params.id;
+    const livroDao = new LivroDao(db);
+
+    livroDao.buscaPorId(id)
+        .then(livro => 
+            resp.marko(
+                require('../views/livros/form/form.marko'),
+                { livro: livro }
+            )
+        )
+        .catch(erro => console.log(erro));
+
+  });
+
 };
 
 
@@ -151,4 +175,29 @@ module.exports = (app) => {
      basta usarmos dois pontos (:) seguidos do nome da variável, que nesse caso é id.
      Para recuperarmos esse valor, basta, dentro do callback, buscarmos o id entre os parâmetros
       dentro da requisição (req.params.id). Essa informação será salva em uma constante id.
-    **/
+    
+    
+    app get buscaPorId
+    Nessa etapa implementaremos a funcionalidade de edição dos nossos livros. De volta ao arquivo 
+    rotas.js, criaremos uma nova rota para atender à URL /livros/form/:id - ou seja, a URL do nosso 
+    formulário de cadastro, com a adição de uma sintaxe para criação de variáveis.
+    Essa rota receberá uma função callback que será executada sempre que o usuário requisitá-la. 
+    Com o id passado na URL, criaremos uma instância de livroDao, buscaremos o livro e, se tudo der 
+    certo, devolveremos a página de formulário da nossa aplicação, passando como parâmetro um 
+    objeto JavaScript com a propriedade livro e recebendo o valor livro que acabamos de receber.
+    Se houver algum erro, vamos exibi-lo no console com console.log()
+
+
+    form livro
+    Porém, se tentarmos entrar na página http://localhost:3000/livros/form, nada será exibido. No
+    console, teremos uma mensagem informando que os cabeçalhos não foram enviados com sucesso 
+    para o cliente. Isso acontece porque, na pagina form.marko, estamos esperando um atributo 
+    chamado livro. Porém, isso só acontece quando estamos editando um livro em /livros/form/:id, 
+    passando o livro retornado da nossa busca para o template. No entanto, na rota /livros/form, 
+    nenhum dado livro é passado, quebrando nossa aplicação. Para resolvermos esse problema, 
+    nessa rota, passaremos para o método resp.marko() um objeto JavaScript com a propriedade
+    livro vazia:
+    app.get('/livros/form', function(req, resp) {
+    resp.marko(require('../views/livros/form/form.marko'), { livro: {} });
+    });
+      **/
